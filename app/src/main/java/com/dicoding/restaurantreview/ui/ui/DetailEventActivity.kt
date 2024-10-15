@@ -48,7 +48,7 @@ class DetailEventActivity : AppCompatActivity() {
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
                 binding.tvBeginTime.text = it.beginTime
-                binding.tvQuota.text = "${it.quota - it.registrants} / ${it.quota}"
+                binding.tvQuota.text = "${it.registrants} / ${it.quota}"
                 binding.btnToLink.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
                     startActivity(intent)
