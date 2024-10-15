@@ -36,7 +36,7 @@ class HomeViewModel : ViewModel() {
 
     init {
         fetchEventDataUpcoming()
-        fetchEventDataFinished() // Ensure this is called to fetch finished events
+        fetchEventDataFinished()
     }
 
     private fun fetchEventDataUpcoming() {
@@ -53,20 +53,20 @@ class HomeViewModel : ViewModel() {
                         _upcomingEvents.value = eventResponse.listEvents
                     } else {
                         Log.e(TAG, "Response body is null")
-                        _errorMessage.value = "Failed to load upcoming events."
+                        _errorMessage.value = "Failed to load upcoming events. Check your internet connection"
                     }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
-                    _errorMessage.value = "Failed to load upcoming events."
+                    _errorMessage.value = "Failed to load upcoming events. Check your internet connection"
                 }
-                _isLoading.value = loadingCounter > 0
+                updateLoadingState()
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
                 loadingCounter--
                 Log.e(TAG, "onFailure: ${t.message}")
-                _errorMessage.value = "Failed to load upcoming events."
-                _isLoading.value = loadingCounter > 0
+                _errorMessage.value = "Failed to load upcoming events. Check your internet connection."
+                updateLoadingState()
             }
         })
     }
@@ -85,26 +85,29 @@ class HomeViewModel : ViewModel() {
                         _finishedEvents.value = eventResponse.listEvents
                     } else {
                         Log.e(TAG, "Response body is null")
-                        _errorMessage.value = "Failed to load finished events."
+                        _errorMessage.value = "Failed to load finished events. Check your internet connection."
                     }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                     _errorMessage.value = "Failed to load finished events. Check your internet connection."
                 }
-                _isLoading.value = loadingCounter > 0
+                updateLoadingState()
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
                 loadingCounter--
                 Log.e(TAG, "onFailure: ${t.message}")
                 _errorMessage.value = "Failed to load finished events. Check your internet connection."
-                _isLoading.value = loadingCounter > 0
+                updateLoadingState()
             }
         })
+    }
+
+    private fun updateLoadingState() {
+        _isLoading.value = loadingCounter > 0
     }
 
     fun clearErrorMessage() {
         _errorMessage.value = null
     }
-
 }

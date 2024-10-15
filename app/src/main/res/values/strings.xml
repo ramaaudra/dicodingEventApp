@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">RestaurantReview</string>
-    <string name="title">Judul</string>
-    <string name="description">Description</string>
-    <string name="review">Review</string>
-    <string name="write_your_review_here">Write your review here..</string>
-    <string name="send">Kirim</string>
     <string name="title_activity_bottom_navigation">BottomNavigation</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -14,4 +9,6 @@
     <string name="register">Register</string>
     <string name="upcoming_events_title">Upcoming Events</string>
     <string name="finished_events_title">Finished events</string>
+    <string name="searchbarhint">Masukan kata</string>
+    <string name="tvtext">TextView</string>
 </resources>

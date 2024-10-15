@@ -30,10 +30,11 @@
             tools:src="@drawable/testmediacover" />
 
         <TextView
-            android:id="@+id/title_event"
+            android:id="@+id/titleEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppinssemibold"
             android:text="Judul Event"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

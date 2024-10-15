@@ -33,7 +33,7 @@ class VerticalAdapter : ListAdapter<ListEventsItem, VerticalAdapter.EventViewHol
 
     class EventViewHolder(private val binding: ItemVerticalListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(event: ListEventsItem) {
-            binding.titleEventVertical.text = event.name
+            binding.titleEvent.text = event.name
             Glide.with(binding.imageViewVertical.context)
                 .load(event.mediaCover)
                 .into(binding.imageViewVertical)

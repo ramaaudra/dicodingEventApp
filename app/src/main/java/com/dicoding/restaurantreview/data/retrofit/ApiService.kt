@@ -15,6 +15,7 @@ interface ApiService {
     fun getDetailEvent(
         @Path("id") id: String
     ): Call<DetailEventResponse>
+
 }
 
 //    @FormUrlEncoded

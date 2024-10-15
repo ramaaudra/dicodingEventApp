@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ui.DetailEventActivity">
@@ -11,9 +10,10 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -31,9 +31,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="TextView"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:text="@string/tvtext"
+            android:fontFamily="@font/poppinsbold"
+            android:textSize="20sp"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="@string/tvtext"
+            android:fontFamily="@font/poppinssemibold"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/tvTitleEvent"
             app:layout_constraintStart_toStartOf="@+id/tvTitleEvent"
@@ -55,7 +56,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="@string/tvtext"
+            android:fontFamily="@font/poppinssemibold"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/tvOwnerName"
             app:layout_constraintStart_toStartOf="@+id/tvOwnerName"
@@ -65,11 +67,13 @@
             android:id="@+id/tvQuota"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="@string/tvtext"
+            android:fontFamily="@font/poppinssemibold"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/tvBeginTime"
-            app:layout_constraintStart_toStartOf="@+id/tvBeginTime"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvBeginTime" />
 
         <TextView
@@ -77,18 +81,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="TextView"
+            android:text="@string/tvtext"
+            android:justificationMode="inter_word"
             app:layout_constraintEnd_toEndOf="@+id/tvQuota"
             app:layout_constraintStart_toStartOf="@+id/tvQuota"
             app:layout_constraintTop_toBottomOf="@+id/tvQuota" />
 
         <Button
             android:id="@+id/btnToLink"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/register"
+            android:fontFamily="@font/poppinsbold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

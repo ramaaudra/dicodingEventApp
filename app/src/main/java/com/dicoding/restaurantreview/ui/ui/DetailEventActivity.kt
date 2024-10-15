@@ -43,7 +43,7 @@ class DetailEventActivity : AppCompatActivity() {
                 binding.tvTitleEvent.text = it.name
                 binding.tvOwnerName.text = it.ownerName
                 binding.tvDescription.text = HtmlCompat.fromHtml(
-                    event.description.toString(),
+                    event.description,
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
                 binding.tvBeginTime.text = it.beginTime

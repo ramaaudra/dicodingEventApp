@@ -1,20 +1,12 @@
 package com.dicoding.restaurantreview.ui
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.restaurantreview.data.response.DetailEventResponse
 import com.dicoding.restaurantreview.data.response.Event
 import com.dicoding.restaurantreview.data.retrofit.ApiConfig
-import com.dicoding.restaurantreview.databinding.ActivityDetailEventBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

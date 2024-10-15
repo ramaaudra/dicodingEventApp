@@ -27,17 +27,17 @@
             tools:src="@drawable/testmediacover" />
 
         <TextView
-            android:id="@+id/title_eventVertical"
+            android:id="@+id/titleEvent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Judul Event"
+            android:fontFamily="@font/poppinssemibold"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewVertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageViewVertical"
-            app:layout_constraintTop_toTopOf="@+id/imageViewVertical"
-            app:layout_constraintVertical_bias="0.043" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
