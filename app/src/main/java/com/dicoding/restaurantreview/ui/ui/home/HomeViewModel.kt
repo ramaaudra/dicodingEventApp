@@ -36,10 +36,8 @@ class HomeViewModel : ViewModel() {
 
     init {
         fetchEventDataUpcoming()
-        fetchEventDataFinished()
+        fetchEventDataFinished() // Ensure this is called to fetch finished events
     }
-
-
 
     private fun fetchEventDataUpcoming() {
         _isLoading.value = true
@@ -47,8 +45,8 @@ class HomeViewModel : ViewModel() {
         val client = ApiConfig.getApiService().getEvents(eventQueryUpcoming)
         client.enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+                loadingCounter--
                 if (response.isSuccessful) {
-                    _isLoading.value = false
                     val eventResponse = response.body()
                     if (eventResponse != null) {
                         Log.d(TAG, "Upcoming events received: ${eventResponse.listEvents}")
@@ -58,20 +56,17 @@ class HomeViewModel : ViewModel() {
                         _errorMessage.value = "Failed to load upcoming events."
                     }
                 } else {
-                    _isLoading.value = true
                     Log.e(TAG, "onFailure: ${response.message()}")
                     _errorMessage.value = "Failed to load upcoming events."
                 }
-                loadingCounter--
-
+                _isLoading.value = loadingCounter > 0
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                _isLoading.value = true
+                loadingCounter--
                 Log.e(TAG, "onFailure: ${t.message}")
                 _errorMessage.value = "Failed to load upcoming events."
-                loadingCounter--
-
+                _isLoading.value = loadingCounter > 0
             }
         })
     }
@@ -82,8 +77,8 @@ class HomeViewModel : ViewModel() {
         val client = ApiConfig.getApiService().getEvents(eventQueryFinished)
         client.enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+                loadingCounter--
                 if (response.isSuccessful) {
-                    _isLoading.value = false
                     val eventResponse = response.body()
                     if (eventResponse != null) {
                         Log.d(TAG, "Finished events received: ${eventResponse.listEvents}")
@@ -93,25 +88,23 @@ class HomeViewModel : ViewModel() {
                         _errorMessage.value = "Failed to load finished events."
                     }
                 } else {
-                    _isLoading.value = true
                     Log.e(TAG, "onFailure: ${response.message()}")
-                    _errorMessage.value = "Failed to load finished events. Cek koneksi internet anda"
+                    _errorMessage.value = "Failed to load finished events. Check your internet connection."
                 }
-                loadingCounter--
-
+                _isLoading.value = loadingCounter > 0
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-                _errorMessage.value = "Failed to load finished events. Cek koneksi internet anda"
                 loadingCounter--
-
+                Log.e(TAG, "onFailure: ${t.message}")
+                _errorMessage.value = "Failed to load finished events. Check your internet connection."
+                _isLoading.value = loadingCounter > 0
             }
         })
     }
 
-
     fun clearErrorMessage() {
         _errorMessage.value = null
     }
+
 }
