@@ -20,7 +20,7 @@ class DashboardViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     companion object {
-        private const val TAG = "MainViewModel"
+        private const val TAG = "DashboardViewModel"
         private const val eventQuery = 1
 
     }

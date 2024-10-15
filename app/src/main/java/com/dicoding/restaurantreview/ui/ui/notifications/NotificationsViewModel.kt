@@ -20,7 +20,7 @@ class NotificationsViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     companion object {
-        private const val TAG = "MainViewModel"
+        private const val TAG = "NotificationsViewModel"
         private const val eventQuery = 0
 
     }
