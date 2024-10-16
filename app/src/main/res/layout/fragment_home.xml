@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ui.home.HomeFragment"
-    android:layout_marginTop="16dp"
-    android:paddingTop="?attr/actionBarSize">
+    android:paddingTop="16dp">
 
 
     <androidx.core.widget.NestedScrollView
@@ -19,6 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dicoding Event"
+                android:fontFamily="@font/black"
+                android:textSize="30sp"
+                android:layout_marginLeft="16dp" />
 
             <TextView
                 android:id="@+id/tvTitleUpcoming"

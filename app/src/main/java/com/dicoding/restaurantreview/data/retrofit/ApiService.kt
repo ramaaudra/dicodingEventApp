@@ -16,6 +16,12 @@ interface ApiService {
         @Path("id") id: String
     ): Call<DetailEventResponse>
 
+    @GET("events")
+    fun searchEvents(
+        @Query("active") active: Int,
+        @Query("q") query: String
+    ): Call<EventResponse>
+
 }
 
 //    @FormUrlEncoded

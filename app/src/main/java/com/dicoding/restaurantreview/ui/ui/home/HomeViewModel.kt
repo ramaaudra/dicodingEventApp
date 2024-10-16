@@ -26,6 +26,10 @@ class HomeViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+
+    private val _searchResults = MutableLiveData<List<ListEventsItem>?>()
+    val searchResults: LiveData<List<ListEventsItem>?> = _searchResults
+
     private var loadingCounter = 0
 
     companion object {
@@ -102,6 +106,10 @@ class HomeViewModel : ViewModel() {
             }
         })
     }
+
+
+
+
 
     private fun updateLoadingState() {
         _isLoading.value = loadingCounter > 0

@@ -31,6 +31,7 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
 
         setupRecyclerView()
+        setupSearchView()
 
         dashboardViewModel.event.observe(viewLifecycleOwner) { event ->
             eventAdapter.submitList(event)
@@ -38,6 +39,10 @@ class DashboardFragment : Fragment() {
 
         dashboardViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             showLoading(isLoading)
+        }
+
+        dashboardViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
+            eventAdapter.submitList(searchResults)
         }
 
         return root
@@ -60,5 +65,21 @@ class DashboardFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.rvEvents.visibility = if (isLoading) View.GONE else View.VISIBLE
+    }
+
+
+    private fun setupSearchView() {
+        binding.searchViewDashbooard.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    dashboardViewModel.searchUpcomingEvents(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 }

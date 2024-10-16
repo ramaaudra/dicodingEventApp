@@ -45,6 +45,10 @@ class HomeFragment : Fragment() {
             showLoading(isLoading)
         }
 
+        homeViewModel.searchResults.observe(viewLifecycleOwner) { events ->
+            verticalAdapter.submitList(events)
+        }
+
         homeViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             message?.let {
                 Log.d("HomeFragment", "Displaying Toast with message: $it")
@@ -76,6 +80,8 @@ class HomeFragment : Fragment() {
         binding.rvEventsVertical.setHasFixedSize(true)
         binding.rvEventsVertical.adapter = verticalAdapter
     }
+
+
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
