@@ -1,12 +1,15 @@
+// DashboardFragment.kt
 package com.dicoding.restaurantreview.ui.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.restaurantreview.data.Result
 import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 import com.dicoding.restaurantreview.databinding.FragmentDashboardBinding
 import com.dicoding.restaurantreview.ui.EventAdapter
@@ -14,35 +17,49 @@ import com.dicoding.restaurantreview.ui.EventAdapter
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var eventAdapter: EventAdapter
-    private val dashboardViewModel: DashboardViewModel by viewModels()
+    private val dashboardViewModel: DashboardViewModel by viewModels {
+        DashboardViewModelFactory.getInstance(requireActivity())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         setupRecyclerView()
         setupSearchView()
 
-        dashboardViewModel.upcomingEvents.observe(viewLifecycleOwner) { event: List<ListEventsItem>? ->
-            eventAdapter.submitList(event)
+        dashboardViewModel.upcomingEvents.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Success -> {
+                    showLoading(false)
+                    eventAdapter.submitList(result.data)
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
-        dashboardViewModel.isLoading.observe(viewLifecycleOwner) { isLoading: Boolean ->
-            showLoading(isLoading)
-        }
-
-        dashboardViewModel.searchResults.observe(viewLifecycleOwner) { searchResults: List<ListEventsItem>? ->
-            eventAdapter.submitList(searchResults)
+        dashboardViewModel.searchResults.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Success -> {
+                    showLoading(false)
+                    eventAdapter.submitList(result.data)
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         return root
@@ -80,5 +97,4 @@ class DashboardFragment : Fragment() {
             }
         })
     }
-
 }

@@ -45,9 +45,7 @@ class DetailEventActivity : AppCompatActivity() {
             return
         }
 
-        val apiService = ApiConfig.getApiService()
-        val database = FavoriteEventDatabase.getInstance(this)
-        val eventRepository = EventRepository(database.favoriteEventDao(), apiService)
+
         val factory: DetailViewModelFactory = DetailViewModelFactory.getInstance(this)
         detailViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 

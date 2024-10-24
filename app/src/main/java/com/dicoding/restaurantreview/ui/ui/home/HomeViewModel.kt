@@ -9,8 +9,6 @@ import com.dicoding.restaurantreview.data.remote.response.EventResponse
 import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 import com.dicoding.restaurantreview.data.remote.retrofit.ApiConfig
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import com.dicoding.restaurantreview.data.Result
 

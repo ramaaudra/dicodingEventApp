@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.restaurantreview.databinding.FragmentDashboardBinding
 import com.dicoding.restaurantreview.databinding.FragmentNotificationsBinding
 import com.dicoding.restaurantreview.ui.EventAdapter
 import com.dicoding.restaurantreview.data.Result
+
 
 class NotificationsFragment : Fragment() {
 
@@ -22,7 +21,9 @@ class NotificationsFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var eventAdapter: EventAdapter
-    private val finishedViewModel by viewModels<NotificationsViewModel>()
+    private val finishedViewModel: NotificationsViewModel by viewModels {
+        NotificationsViewModelFactory.getInstance(requireActivity())
+    }
 
 
     override fun onCreateView(
@@ -100,7 +101,6 @@ class NotificationsFragment : Fragment() {
                 }
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
