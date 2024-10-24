@@ -11,4 +11,5 @@
     <string name="finished_events_title">Finished events</string>
     <string name="searchbarhint">Masukan kata</string>
     <string name="tvtext">TextView</string>
+    <string name="quota_text">Sisa kuota: %1$d</string>
 </resources>

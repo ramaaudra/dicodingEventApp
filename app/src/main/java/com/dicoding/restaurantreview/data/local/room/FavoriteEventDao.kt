@@ -26,4 +26,7 @@ interface FavoriteEventDao {
 
     @Delete
     suspend fun deleteAll(event: FavoriteEventEntity)
+
+    @Query("SELECT * FROM favorite_event WHERE id = :eventId")
+    fun getFavoriteEventById(eventId: String): LiveData<FavoriteEventEntity?>
 }

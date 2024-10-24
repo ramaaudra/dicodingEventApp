@@ -33,6 +33,10 @@ class EventRepository(
         return favoriteEventDao.isEventFavorited(id)
     }
 
+    fun getFavoriteEventById(eventId: String): LiveData<FavoriteEventEntity?> {
+        return favoriteEventDao.getFavoriteEventById(eventId)
+    }
+
     suspend fun fetchEventDetail(eventId: Int): Result<Event?> = withContext(Dispatchers.IO) {
         return@withContext try {
             val response = apiService.getDetailEvent(eventId.toString())

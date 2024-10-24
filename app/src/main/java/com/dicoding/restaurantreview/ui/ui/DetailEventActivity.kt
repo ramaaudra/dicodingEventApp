@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.dicoding.restaurantreview.R
 import com.dicoding.restaurantreview.data.EventRepository
 import com.dicoding.restaurantreview.data.local.entity.FavoriteEventEntity
 import com.dicoding.restaurantreview.data.local.room.FavoriteEventDatabase
@@ -48,7 +51,7 @@ class DetailEventActivity : AppCompatActivity() {
         val database = FavoriteEventDatabase.getDatabase(this)
         val eventRepository = EventRepository(database.favoriteEventDao(), apiService)
         val factory = DetailViewModelFactory(eventRepository)
-        detailViewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
+        detailViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         detailViewModel.fetchEventDetail(eventId)
 
@@ -66,7 +69,7 @@ class DetailEventActivity : AppCompatActivity() {
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
                 binding.tvBeginTime.text = eventDetail.beginTime
-                binding.tvQuota.text = "Sisa kuota: ${eventDetail.quota - eventDetail.registrants}"
+                binding.tvQuota.text = getString(R.string.quota_text, eventDetail.quota - eventDetail.registrants)
                 binding.btnToLink.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(eventDetail.link))
                     startActivity(intent)
@@ -74,13 +77,16 @@ class DetailEventActivity : AppCompatActivity() {
 
                 // Set FAB click listener
                 binding.fabBookmark.setOnClickListener {
-                    val favoriteEvent = FavoriteEventEntity(
-                        id = eventDetail.id.toString(),
-                        name = eventDetail.name,
-                        mediaCover = eventDetail.mediaCover
-                    )
-                    detailViewModel.insertFavoriteEvent(favoriteEvent)
-                    Toast.makeText(this, "Event added to favorites", Toast.LENGTH_SHORT).show()
+                    detailViewModel.toggleFavoriteEvent(eventDetail)
+                }
+
+                // Observe favorite status
+                detailViewModel.getEventById(eventDetail.id.toString()).observe(this) { favoriteEvent ->
+                    if (favoriteEvent != null) {
+                        binding.fabBookmark.setImageResource(R.drawable.baseline_bookmark_added_24)
+                    } else {
+                        binding.fabBookmark.setImageResource(R.drawable.baseline_bookmark_border_24)
+                    }
                 }
             } ?: run {
                 Log.e("DetailEventActivity", "Event detail is null")
@@ -100,4 +106,7 @@ class DetailEventActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.scrollView.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
+
+
+
 }
