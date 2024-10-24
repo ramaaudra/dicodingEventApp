@@ -15,7 +15,7 @@
         android:theme="@style/Theme.RestaurantReview"
         tools:targetApi="31">
         <activity
-            android:name=".ui.ui.DetailEventActivity"
+            android:name=".ui.ui.detail.DetailEventActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

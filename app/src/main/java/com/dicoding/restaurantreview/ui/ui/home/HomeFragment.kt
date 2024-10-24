@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.restaurantreview.databinding.FragmentHomeBinding
+import com.dicoding.restaurantreview.data.Result
 
 
 class HomeFragment : Fragment() {
@@ -28,32 +29,47 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
         setupRecyclerViewHorizontal()
         setupRecyclerViewVertical()
 
-        homeViewModel.upcomingEvents.observe(viewLifecycleOwner) { events ->
-            horizontalAdapter.submitList(events)
+        homeViewModel.upcomingEvents.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+//                    binding.rvEventsVertical.visibility = View.GONE
+                    binding.rvEventsHorizontal.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+//                    binding.rvEventsVertical.visibility = View.VISIBLE
+                    binding.rvEventsHorizontal.visibility = View.VISIBLE
+                    horizontalAdapter.submitList(result.data)
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+//                    binding.rvEventsVertical.visibility = View.GONE
+                    binding.rvEventsHorizontal.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
-        homeViewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
-            verticalAdapter.submitList(events)
-        }
-
-        homeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            showLoading(isLoading)
-        }
-
-        homeViewModel.searchResults.observe(viewLifecycleOwner) { events ->
-            verticalAdapter.submitList(events)
-        }
-
-        homeViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                Log.d("HomeFragment", "Displaying Toast with message: $it")
-                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                homeViewModel.clearErrorMessage()
+        homeViewModel.finishedEvents.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.rvEventsVertical.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvEventsVertical.visibility = View.VISIBLE
+                    verticalAdapter.submitList(result.data)
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvEventsVertical.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -67,35 +83,15 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerViewHorizontal() {
         horizontalAdapter = HorizontalAdapter()
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvEventsHorizontal.layoutManager = layoutManager
+        binding.rvEventsHorizontal.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvEventsHorizontal.setHasFixedSize(true)
         binding.rvEventsHorizontal.adapter = horizontalAdapter
     }
 
     private fun setupRecyclerViewVertical() {
         verticalAdapter = VerticalAdapter()
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.rvEventsVertical.layoutManager = layoutManager
+        binding.rvEventsVertical.layoutManager = LinearLayoutManager(requireContext())
         binding.rvEventsVertical.setHasFixedSize(true)
         binding.rvEventsVertical.adapter = verticalAdapter
-    }
-
-
-
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.rvEventsVertical.visibility = View.GONE
-            binding.rvEventsHorizontal.visibility = View.GONE
-            binding.tvTitleFinished.visibility = View.GONE
-            binding.tvTitleUpcoming.visibility = View.GONE
-        } else {
-            binding.progressBar.visibility = View.GONE
-            binding.rvEventsVertical.visibility = View.VISIBLE
-            binding.rvEventsHorizontal.visibility = View.VISIBLE
-            binding.tvTitleFinished.visibility = View.VISIBLE
-            binding.tvTitleUpcoming.visibility = View.VISIBLE
-        }
     }
 }

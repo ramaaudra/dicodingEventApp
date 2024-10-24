@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.restaurantreview.databinding.FragmentDashboardBinding
 import com.dicoding.restaurantreview.databinding.FragmentNotificationsBinding
 import com.dicoding.restaurantreview.ui.EventAdapter
+import com.dicoding.restaurantreview.data.Result
 
 class NotificationsFragment : Fragment() {
 
@@ -34,16 +36,42 @@ class NotificationsFragment : Fragment() {
         setupRecyclerView()
         setupSearchView()
 
-        finishedViewModel.event.observe(viewLifecycleOwner) { event ->
-            eventAdapter.submitList(event)
+        finishedViewModel.event.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.rvEventsNotification.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvEventsNotification.visibility = View.VISIBLE
+                    eventAdapter.submitList(result.data)
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvEventsNotification.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
-        finishedViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            showLoading(isLoading)
-        }
-
-        finishedViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
-            eventAdapter.submitList(searchResults)
+        finishedViewModel.searchResults.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.rvEventsNotification.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvEventsNotification.visibility = View.VISIBLE
+                    eventAdapter.submitList(result.data)
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvEventsNotification.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         return root
@@ -63,10 +91,6 @@ class NotificationsFragment : Fragment() {
         binding.rvEventsNotification.adapter = eventAdapter
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.rvEventsNotification.visibility = if (isLoading) View.GONE else View.VISIBLE
-    }
 
     private fun setupSearchView() {
         binding.searchViewNotification.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {

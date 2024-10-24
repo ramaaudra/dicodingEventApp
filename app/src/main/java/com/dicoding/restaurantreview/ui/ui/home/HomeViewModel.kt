@@ -12,26 +12,17 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.dicoding.restaurantreview.data.Result
 
 
 class HomeViewModel : ViewModel() {
 
-    private val _upcomingEvents = MutableLiveData<List<ListEventsItem>?>()
-    val upcomingEvents: LiveData<List<ListEventsItem>?> = _upcomingEvents
+    private val _upcomingEvents = MutableLiveData<Result<List<ListEventsItem>?>>()
+    val upcomingEvents: LiveData<Result<List<ListEventsItem>?>> = _upcomingEvents
 
-    private val _finishedEvents = MutableLiveData<List<ListEventsItem>?>()
-    val finishedEvents: LiveData<List<ListEventsItem>?> = _finishedEvents
+    private val _finishedEvents = MutableLiveData<Result<List<ListEventsItem>?>>()
+    val finishedEvents: LiveData<Result<List<ListEventsItem>?>> = _finishedEvents
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
-
-    private val _searchResults = MutableLiveData<List<ListEventsItem>?>()
-    val searchResults: LiveData<List<ListEventsItem>?> = _searchResults
-
-    private var loadingCounter = 0
 
     companion object {
         private const val TAG = "HomeViewModel"
@@ -45,66 +36,47 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun fetchEventDataUpcoming() {
-        _isLoading.value = true
-        loadingCounter++
+        _upcomingEvents.value = Result.Loading
         viewModelScope.launch {
             try {
                 val response: Response<EventResponse> = ApiConfig.getApiService().getEvents(eventQueryUpcoming)
-                loadingCounter--
-                _isLoading.value = loadingCounter > 0
                 if (response.isSuccessful) {
                     val eventResponse = response.body()
                     if (eventResponse != null) {
-                        Log.d(TAG, "Upcoming events received: ${eventResponse.listEvents}")
-                        _upcomingEvents.value = eventResponse.listEvents
+                        _upcomingEvents.value = Result.Success(eventResponse.listEvents)
                     } else {
-                        Log.e(TAG, "Response body is null")
-                        _errorMessage.value = "Failed to load upcoming events. Check your internet connection"
+                        _upcomingEvents.value = Result.Error("Failed to load upcoming events. Check your internet connection.")
                     }
                 } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                    _errorMessage.value = "Failed to load upcoming events. Check your internet connection"
+                    _upcomingEvents.value = Result.Error("Failed to load upcoming events. Check your internet connection.")
                 }
             } catch (e: Exception) {
-                loadingCounter--
-                _isLoading.value = loadingCounter > 0
                 Log.e(TAG, "Exception: ${e.message}")
-                _errorMessage.value = "Failed to load upcoming events. Check your internet connection."
+                _upcomingEvents.value = Result.Error("Failed to load upcoming events. Check your internet connection.")
             }
         }
     }
 
     private fun fetchEventDataFinished() {
-        _isLoading.value = true
-        loadingCounter++
+        _finishedEvents.value = Result.Loading
         viewModelScope.launch {
             try {
                 val response: Response<EventResponse> = ApiConfig.getApiService().getEvents(eventQueryFinished)
-                loadingCounter--
-                _isLoading.value = loadingCounter > 0
                 if (response.isSuccessful) {
                     val eventResponse = response.body()
                     if (eventResponse != null) {
-                        Log.d(TAG, "Finished events received: ${eventResponse.listEvents}")
-                        _finishedEvents.value = eventResponse.listEvents
+                        _finishedEvents.value = Result.Success(eventResponse.listEvents)
                     } else {
-                        Log.e(TAG, "Response body is null")
-                        _errorMessage.value = "Failed to load finished events. Check your internet connection."
+                        _finishedEvents.value = Result.Error("Failed to load finished events. Check your internet connection.")
                     }
                 } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                    _errorMessage.value = "Failed to load finished events. Check your internet connection."
+                    _finishedEvents.value = Result.Error("Failed to load finished events. Check your internet connection.")
                 }
             } catch (e: Exception) {
-                loadingCounter--
-                _isLoading.value = loadingCounter > 0
                 Log.e(TAG, "Exception: ${e.message}")
-                _errorMessage.value = "Failed to load finished events. Check your internet connection."
+                _finishedEvents.value = Result.Error("Failed to load finished events. Check your internet connection.")
             }
         }
     }
 
-    fun clearErrorMessage() {
-        _errorMessage.value = null
-    }
 }

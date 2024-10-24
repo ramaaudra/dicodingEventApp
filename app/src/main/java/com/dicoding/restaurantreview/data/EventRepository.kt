@@ -13,9 +13,6 @@ class EventRepository(
     private val apiService: ApiService
 ) {
 
-    fun getAllFavoriteEvents(): LiveData<List<FavoriteEventEntity>> {
-        return favoriteEventDao.getAllFavoriteEvents()
-    }
 
     suspend fun insertFavoriteEvent(event: FavoriteEventEntity) {
         favoriteEventDao.insertNews(listOf(event))
@@ -45,5 +42,18 @@ class EventRepository(
         } catch (e: Exception) {
             Result.Error("Network error: ${e.message}")
         }
+    }
+
+    companion object {
+        @Volatile
+        private var instance: EventRepository? = null
+
+        fun getInstance(
+            dao: FavoriteEventDao,
+            apiService: ApiService
+        ): EventRepository =
+            instance ?: synchronized(this) {
+                instance ?: EventRepository(dao, apiService).also { instance = it }
+            }
     }
 }

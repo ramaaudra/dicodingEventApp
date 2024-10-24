@@ -1,10 +1,8 @@
-package com.dicoding.restaurantreview.ui
+package com.dicoding.restaurantreview.ui.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.dicoding.restaurantreview.data.EventRepository
 import com.dicoding.restaurantreview.data.local.entity.FavoriteEventEntity
@@ -18,8 +16,6 @@ class DetailViewModel(private val eventRepository: EventRepository) : ViewModel(
     private val _eventDetail = MutableLiveData<Result<Event?>>()
     val eventDetail: LiveData<Result<Event?>> = _eventDetail
 
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
 
     fun fetchEventDetail(eventId: Int) {
         _eventDetail.value = Result.Loading

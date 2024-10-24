@@ -15,7 +15,7 @@ abstract class FavoriteEventDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: FavoriteEventDatabase? = null
 
-        fun getDatabase(context: Context): FavoriteEventDatabase {
+        fun getInstance(context: Context): FavoriteEventDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

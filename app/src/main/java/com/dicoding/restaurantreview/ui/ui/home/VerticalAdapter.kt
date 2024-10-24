@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 import com.dicoding.restaurantreview.databinding.ItemVerticalListBinding
-import com.dicoding.restaurantreview.ui.ui.DetailEventActivity
+import com.dicoding.restaurantreview.ui.ui.detail.DetailEventActivity
 
 class VerticalAdapter : ListAdapter<ListEventsItem, VerticalAdapter.EventViewHolder>(DIFF_CALLBACK) {
 

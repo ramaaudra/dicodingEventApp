@@ -1,4 +1,4 @@
-package com.dicoding.restaurantreview.ui.ui
+package com.dicoding.restaurantreview.ui.ui.detail
 
 import android.content.Intent
 import android.net.Uri
@@ -15,8 +15,8 @@ import com.dicoding.restaurantreview.data.EventRepository
 import com.dicoding.restaurantreview.data.local.room.FavoriteEventDatabase
 import com.dicoding.restaurantreview.data.remote.retrofit.ApiConfig
 import com.dicoding.restaurantreview.databinding.ActivityDetailEventBinding
-import com.dicoding.restaurantreview.ui.DetailViewModel
 import com.dicoding.restaurantreview.data.Result
+import androidx.fragment.app.Fragment
 
 
 
@@ -46,9 +46,9 @@ class DetailEventActivity : AppCompatActivity() {
         }
 
         val apiService = ApiConfig.getApiService()
-        val database = FavoriteEventDatabase.getDatabase(this)
+        val database = FavoriteEventDatabase.getInstance(this)
         val eventRepository = EventRepository(database.favoriteEventDao(), apiService)
-        val factory = DetailViewModelFactory(eventRepository)
+        val factory: DetailViewModelFactory = DetailViewModelFactory.getInstance(this)
         detailViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         detailViewModel.fetchEventDetail(eventId)
@@ -106,10 +106,5 @@ class DetailEventActivity : AppCompatActivity() {
             }
         }
 
-        detailViewModel.errorMessage.observe(this) { message ->
-            message?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-            }
-        }
     }
 }

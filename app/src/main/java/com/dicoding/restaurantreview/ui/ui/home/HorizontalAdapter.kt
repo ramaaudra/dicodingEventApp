@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 import com.dicoding.restaurantreview.databinding.ItemEventBinding
-import com.dicoding.restaurantreview.ui.ui.DetailEventActivity
+import com.dicoding.restaurantreview.ui.ui.detail.DetailEventActivity
 
 class HorizontalAdapter : ListAdapter<ListEventsItem, HorizontalAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
