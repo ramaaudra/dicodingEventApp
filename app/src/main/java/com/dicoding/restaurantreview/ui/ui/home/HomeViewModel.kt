@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dicoding.restaurantreview.data.response.EventResponse
-import com.dicoding.restaurantreview.data.response.ListEventsItem
-import com.dicoding.restaurantreview.data.retrofit.ApiConfig
+import androidx.lifecycle.viewModelScope
+import com.dicoding.restaurantreview.data.remote.response.EventResponse
+import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
+import com.dicoding.restaurantreview.data.remote.retrofit.ApiConfig
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +27,6 @@ class HomeViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
-
 
     private val _searchResults = MutableLiveData<List<ListEventsItem>?>()
     val searchResults: LiveData<List<ListEventsItem>?> = _searchResults
@@ -46,10 +47,11 @@ class HomeViewModel : ViewModel() {
     private fun fetchEventDataUpcoming() {
         _isLoading.value = true
         loadingCounter++
-        val client = ApiConfig.getApiService().getEvents(eventQueryUpcoming)
-        client.enqueue(object : Callback<EventResponse> {
-            override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+        viewModelScope.launch {
+            try {
+                val response: Response<EventResponse> = ApiConfig.getApiService().getEvents(eventQueryUpcoming)
                 loadingCounter--
+                _isLoading.value = loadingCounter > 0
                 if (response.isSuccessful) {
                     val eventResponse = response.body()
                     if (eventResponse != null) {
@@ -63,25 +65,23 @@ class HomeViewModel : ViewModel() {
                     Log.e(TAG, "onFailure: ${response.message()}")
                     _errorMessage.value = "Failed to load upcoming events. Check your internet connection"
                 }
-                updateLoadingState()
-            }
-
-            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+            } catch (e: Exception) {
                 loadingCounter--
-                Log.e(TAG, "onFailure: ${t.message}")
+                _isLoading.value = loadingCounter > 0
+                Log.e(TAG, "Exception: ${e.message}")
                 _errorMessage.value = "Failed to load upcoming events. Check your internet connection."
-                updateLoadingState()
             }
-        })
+        }
     }
 
     private fun fetchEventDataFinished() {
         _isLoading.value = true
         loadingCounter++
-        val client = ApiConfig.getApiService().getEvents(eventQueryFinished)
-        client.enqueue(object : Callback<EventResponse> {
-            override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+        viewModelScope.launch {
+            try {
+                val response: Response<EventResponse> = ApiConfig.getApiService().getEvents(eventQueryFinished)
                 loadingCounter--
+                _isLoading.value = loadingCounter > 0
                 if (response.isSuccessful) {
                     val eventResponse = response.body()
                     if (eventResponse != null) {
@@ -95,24 +95,13 @@ class HomeViewModel : ViewModel() {
                     Log.e(TAG, "onFailure: ${response.message()}")
                     _errorMessage.value = "Failed to load finished events. Check your internet connection."
                 }
-                updateLoadingState()
-            }
-
-            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+            } catch (e: Exception) {
                 loadingCounter--
-                Log.e(TAG, "onFailure: ${t.message}")
+                _isLoading.value = loadingCounter > 0
+                Log.e(TAG, "Exception: ${e.message}")
                 _errorMessage.value = "Failed to load finished events. Check your internet connection."
-                updateLoadingState()
             }
-        })
-    }
-
-
-
-
-
-    private fun updateLoadingState() {
-        _isLoading.value = loadingCounter > 0
+        }
     }
 
     fun clearErrorMessage() {

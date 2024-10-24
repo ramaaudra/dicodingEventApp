@@ -9,13 +9,20 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.dicoding.restaurantreview.data.EventRepository
+import com.dicoding.restaurantreview.data.local.entity.FavoriteEventEntity
+import com.dicoding.restaurantreview.data.local.room.FavoriteEventDatabase
+import com.dicoding.restaurantreview.data.remote.retrofit.ApiConfig
 import com.dicoding.restaurantreview.databinding.ActivityDetailEventBinding
 import com.dicoding.restaurantreview.ui.DetailViewModel
 
+
+
 class DetailEventActivity : AppCompatActivity() {
 
-    private val detailViewModel: DetailViewModel by viewModels()
+    private lateinit var detailViewModel: DetailViewModel
     private lateinit var binding: ActivityDetailEventBinding
 
     companion object {
@@ -30,29 +37,55 @@ class DetailEventActivity : AppCompatActivity() {
         val eventId = intent.getIntExtra(EXTRA_EVENT_ID, -1)
         Log.d("DetailEventActivity", "Received event ID: $eventId")
 
-        if (eventId != -1) {
-            detailViewModel.fetchEventDetail(eventId)
+        if (eventId == -1) {
+            Log.e("DetailEventActivity", "Invalid event ID")
+            Toast.makeText(this, "Invalid event ID", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
+
+        val apiService = ApiConfig.getApiService()
+        val database = FavoriteEventDatabase.getDatabase(this)
+        val eventRepository = EventRepository(database.favoriteEventDao(), apiService)
+        val factory = DetailViewModelFactory(eventRepository)
+        detailViewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
+
+        detailViewModel.fetchEventDetail(eventId)
 
         detailViewModel.isLoading.observe(this) {
             showLoading(it)
         }
 
         detailViewModel.eventDetail.observe(this) { event ->
-            event?.let {
-                Glide.with(this).load(it.mediaCover).into(binding.imageView2)
-                binding.tvTitleEvent.text = it.name
-                binding.tvOwnerName.text = it.ownerName
+            event?.let { eventDetail ->
+                Glide.with(this).load(eventDetail.mediaCover).into(binding.imageView2)
+                binding.tvTitleEvent.text = eventDetail.name
+                binding.tvOwnerName.text = eventDetail.ownerName
                 binding.tvDescription.text = HtmlCompat.fromHtml(
-                    event.description,
+                    eventDetail.description,
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
-                binding.tvBeginTime.text = it.beginTime
-                binding.tvQuota.text = "Sisa kuota: ${it.quota - it.registrants}"
+                binding.tvBeginTime.text = eventDetail.beginTime
+                binding.tvQuota.text = "Sisa kuota: ${eventDetail.quota - eventDetail.registrants}"
                 binding.btnToLink.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(eventDetail.link))
                     startActivity(intent)
                 }
+
+                // Set FAB click listener
+                binding.fabBookmark.setOnClickListener {
+                    val favoriteEvent = FavoriteEventEntity(
+                        id = eventDetail.id.toString(),
+                        name = eventDetail.name,
+                        mediaCover = eventDetail.mediaCover
+                    )
+                    detailViewModel.insertFavoriteEvent(favoriteEvent)
+                    Toast.makeText(this, "Event added to favorites", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Log.e("DetailEventActivity", "Event detail is null")
+                Toast.makeText(this, "Event detail not found", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
 

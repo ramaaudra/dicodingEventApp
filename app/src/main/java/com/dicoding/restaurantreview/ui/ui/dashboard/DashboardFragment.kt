@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 import com.dicoding.restaurantreview.databinding.FragmentDashboardBinding
 import com.dicoding.restaurantreview.ui.EventAdapter
-
 
 class DashboardFragment : Fragment() {
 
@@ -19,7 +19,7 @@ class DashboardFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var eventAdapter: EventAdapter
-    private val dashboardViewModel by viewModels<DashboardViewModel>()
+    private val dashboardViewModel: DashboardViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,21 +33,20 @@ class DashboardFragment : Fragment() {
         setupRecyclerView()
         setupSearchView()
 
-        dashboardViewModel.event.observe(viewLifecycleOwner) { event ->
+        dashboardViewModel.upcomingEvents.observe(viewLifecycleOwner) { event: List<ListEventsItem>? ->
             eventAdapter.submitList(event)
         }
 
-        dashboardViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner) { isLoading: Boolean ->
             showLoading(isLoading)
         }
 
-        dashboardViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
+        dashboardViewModel.searchResults.observe(viewLifecycleOwner) { searchResults: List<ListEventsItem>? ->
             eventAdapter.submitList(searchResults)
         }
 
         return root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -67,7 +66,6 @@ class DashboardFragment : Fragment() {
         binding.rvEvents.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
 
-
     private fun setupSearchView() {
         binding.searchViewDashbooard.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -82,4 +80,5 @@ class DashboardFragment : Fragment() {
             }
         })
     }
+
 }

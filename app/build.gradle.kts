@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -10,6 +12,16 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
 
     defaultConfig {
         applicationId = "com.dicoding.restaurantreview"
@@ -61,6 +73,11 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     //end of retrofit and gson
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
 
 }

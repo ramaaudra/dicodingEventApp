@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dicoding.restaurantreview.data.response.ListEventsItem
+import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 import com.dicoding.restaurantreview.databinding.ItemEventBinding
 import com.dicoding.restaurantreview.ui.ui.DetailEventActivity
 
