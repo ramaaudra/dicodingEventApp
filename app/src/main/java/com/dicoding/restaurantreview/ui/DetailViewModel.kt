@@ -15,25 +15,17 @@ import com.dicoding.restaurantreview.data.Result
 
 class DetailViewModel(private val eventRepository: EventRepository) : ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _eventDetail = MutableLiveData<Event?>()
-    val eventDetail: LiveData<Event?> = _eventDetail
+    private val _eventDetail = MutableLiveData<Result<Event?>>()
+    val eventDetail: LiveData<Result<Event?>> = _eventDetail
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
     fun fetchEventDetail(eventId: Int) {
-        _isLoading.value = true
+        _eventDetail.value = Result.Loading
         viewModelScope.launch {
             val result = eventRepository.fetchEventDetail(eventId)
-            _isLoading.value = false
-            if (result is Result.Success) {
-                _eventDetail.value = result.data
-            } else if (result is Result.Error) {
-                _errorMessage.value = result.message
-            }
+            _eventDetail.value = result
         }
     }
 
@@ -41,17 +33,6 @@ class DetailViewModel(private val eventRepository: EventRepository) : ViewModel(
         return eventRepository.getFavoriteEventById(eventId)
     }
 
-    fun insertFavoriteEvent(event: FavoriteEventEntity) {
-        viewModelScope.launch {
-            eventRepository.insertFavoriteEvent(event)
-        }
-    }
-
-    fun deleteFavoriteEvent(event: FavoriteEventEntity) {
-        viewModelScope.launch {
-            eventRepository.deleteFavoriteEvent(event)
-        }
-    }
     fun toggleFavoriteEvent(event: Event) {
         viewModelScope.launch {
             val isFavorited = eventRepository.isEventFavorited(event.id.toString())

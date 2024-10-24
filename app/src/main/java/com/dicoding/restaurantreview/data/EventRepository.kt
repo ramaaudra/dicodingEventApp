@@ -21,10 +21,6 @@ class EventRepository(
         favoriteEventDao.insertNews(listOf(event))
     }
 
-    suspend fun updateFavoriteEvent(event: FavoriteEventEntity) {
-        favoriteEventDao.updateNews(event)
-    }
-
     suspend fun deleteFavoriteEvent(event: FavoriteEventEntity) {
         favoriteEventDao.deleteAll(event)
     }
