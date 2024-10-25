@@ -83,5 +83,8 @@ dependencies {
     implementation (libs.androidx.lifecycle.extensions)
     implementation(libs.androidx.datastore.preferences)
 
+    implementation("androidx.work:work-runtime:2.9.1")
+    implementation("com.loopj.android:android-async-http:1.4.11")
+
 
 }
