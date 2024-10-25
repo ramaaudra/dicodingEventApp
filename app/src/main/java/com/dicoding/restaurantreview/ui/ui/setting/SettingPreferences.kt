@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore by preferencesDataStore(name = "settings")
@@ -40,5 +41,13 @@ class SettingPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { preferences ->
             preferences[DARK_MODE_KEY] = enabled
         }
+    }
+
+    suspend fun getThemeSettingSync(): Boolean {
+        return dataStore.data
+            .map { preferences ->
+                preferences[DARK_MODE_KEY] ?: false // default ke false jika tidak ada pengaturan
+            }
+            .first() // mengambil data pertama (sinkron)
     }
 }

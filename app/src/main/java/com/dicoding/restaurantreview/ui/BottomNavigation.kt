@@ -18,6 +18,7 @@ import com.dicoding.restaurantreview.ui.ui.setting.SettingViewModelFactory
 import com.dicoding.restaurantreview.ui.ui.setting.dataStore
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class BottomNavigation : AppCompatActivity() {
 
@@ -25,12 +26,22 @@ class BottomNavigation : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val pref = SettingPreferences.getInstance(this.dataStore)
+        runBlocking {
+            val isDarkModeActive = pref.getThemeSettingSync()
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityBottomNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val pref = SettingPreferences.getInstance(this.dataStore)
+
         val settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref))[SettingViewModel::class.java]
 
         settingViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
