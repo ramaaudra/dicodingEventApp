@@ -35,8 +35,13 @@ class DetailEventActivity : AppCompatActivity() {
         binding = ActivityDetailEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val eventId = intent.getIntExtra(EXTRA_EVENT_ID, -1)
-        Log.d("DetailEventActivity", "Received event ID: $eventId")
+        // Mengambil eventId sebagai String
+        val eventIdString = intent.getStringExtra(EXTRA_EVENT_ID)
+
+        // Konversi eventId dari String ke Int
+        val eventId = eventIdString?.toIntOrNull() ?: -1
+
+
 
         if (eventId == -1) {
             Log.e("DetailEventActivity", "Invalid event ID")

@@ -84,7 +84,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.searchViewDashbooard.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.searchViewDashboard.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     dashboardViewModel.searchUpcomingEvents(it)

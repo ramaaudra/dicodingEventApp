@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ui.dashboard.DashboardFragment"
+    tools:context=".ui.ui.favorite.FavoriteFragment"
     android:layout_marginTop="8dp">
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchViewDashboard"
+        android:id="@+id/searchViewFavorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -22,7 +22,7 @@
     </androidx.appcompat.widget.SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvEvents"
+        android:id="@+id/rvEventsFavorite"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="?attr/actionBarSize"

@@ -1,6 +1,7 @@
 package com.dicoding.restaurantreview.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.dicoding.restaurantreview.data.local.entity.FavoriteEventEntity
 import com.dicoding.restaurantreview.data.local.room.FavoriteEventDao
 import com.dicoding.restaurantreview.data.remote.response.Event
@@ -100,7 +101,9 @@ class EventRepository(
         }
     }
 
-
+    fun getFavoriteEvents(): LiveData<List<FavoriteEventEntity>> {
+        return favoriteEventDao.getAllFavoriteEvents()
+    }
 
     companion object {
         @Volatile

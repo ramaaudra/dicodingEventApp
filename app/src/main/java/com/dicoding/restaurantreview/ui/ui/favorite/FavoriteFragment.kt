@@ -1,0 +1,77 @@
+package com.dicoding.restaurantreview.ui.ui.favorite
+
+import androidx.fragment.app.viewModels
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.restaurantreview.data.Result
+import com.dicoding.restaurantreview.databinding.FragmentFavoriteBinding
+
+class FavoriteFragment : Fragment() {
+
+    private var _binding: FragmentFavoriteBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var favoriteEventAdapter: FavoriteEventAdapter
+    private val bookmarkedEventsViewModel: FavoriteViewModel by viewModels {
+        FavoriteViewModelFactory.getInstance(requireActivity())
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        setupRecyclerView()
+
+        bookmarkedEventsViewModel.bookmarkedEvents.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                    Log.d("FavoriteFragment", "Loading favorite events")
+                }
+                is Result.Success -> {
+                    showLoading(false)
+                    val data = result.data
+                    if (data.isNullOrEmpty()) {
+                        Toast.makeText(context, "No favorite events found", Toast.LENGTH_LONG).show()
+                    } else {
+                        Log.d("FavoriteFragment", "Favorite events loaded: $data")
+                        favoriteEventAdapter.submitList(data)
+                    }
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Log.e("FavoriteFragment", "Error loading favorite events: ${result.message}")
+                    Toast.makeText(context, "Error: ${result.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupRecyclerView() {
+        favoriteEventAdapter = FavoriteEventAdapter()
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.rvEventsFavorite.layoutManager = layoutManager
+        binding.rvEventsFavorite.setHasFixedSize(true)
+        binding.rvEventsFavorite.adapter = favoriteEventAdapter
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.rvEventsFavorite.visibility = if (isLoading) View.GONE else View.VISIBLE
+    }
+}

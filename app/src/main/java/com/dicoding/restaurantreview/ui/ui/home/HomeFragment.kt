@@ -19,7 +19,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var horizontalAdapter: HorizontalAdapter
     private lateinit var verticalAdapter: VerticalAdapter
-    private val homeViewModel by viewModels<HomeViewModel>()
+    private val homeViewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory.getInstance(requireActivity())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
