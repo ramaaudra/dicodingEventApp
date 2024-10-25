@@ -16,7 +16,6 @@ class DetailViewModel(private val eventRepository: EventRepository) : ViewModel(
     private val _eventDetail = MutableLiveData<Result<Event?>>()
     val eventDetail: LiveData<Result<Event?>> = _eventDetail
 
-
     fun fetchEventDetail(eventId: Int) {
         _eventDetail.value = Result.Loading
         viewModelScope.launch {
@@ -25,17 +24,17 @@ class DetailViewModel(private val eventRepository: EventRepository) : ViewModel(
         }
     }
 
-    fun getEventById(eventId: String): LiveData<FavoriteEventEntity?> {
+    fun getEventById(eventId: Int): LiveData<FavoriteEventEntity?> {
         return eventRepository.getFavoriteEventById(eventId)
     }
 
     fun toggleFavoriteEvent(event: Event) {
         viewModelScope.launch {
-            val isFavorited = eventRepository.isEventFavorited(event.id.toString())
+            val isFavorited = eventRepository.isEventFavorited(event.id)
             if (isFavorited) {
-                eventRepository.deleteFavoriteEvent(FavoriteEventEntity(event.id.toString(), event.name, event.mediaCover))
+                eventRepository.deleteFavoriteEvent(FavoriteEventEntity(event.id, event.name, event.mediaCover))
             } else {
-                eventRepository.insertFavoriteEvent(FavoriteEventEntity(event.id.toString(), event.name, event.mediaCover))
+                eventRepository.insertFavoriteEvent(FavoriteEventEntity(event.id, event.name, event.mediaCover))
             }
         }
     }

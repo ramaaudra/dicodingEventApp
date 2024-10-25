@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class FavoriteEventEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    var id: String,
+    var id: Int,
 
     @ColumnInfo(name = "name")
     var name: String,

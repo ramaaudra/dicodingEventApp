@@ -37,10 +37,10 @@ class FavoriteEventAdapter : ListAdapter<FavoriteEventEntity, FavoriteEventAdapt
             // Set OnClickListener
             binding.root.setOnClickListener {
                 val context = binding.root.context
-                val eventId = event.id.toString()
+                val eventId = event.id
                 Log.d("FavoriteEventAdapter", "Clicked event ID: $eventId")
                 val intent = Intent(context, DetailEventActivity::class.java).apply {
-                    putExtra(DetailEventActivity.EXTRA_EVENT_ID, eventId)
+                    putExtra(DetailEventActivity.EXTRA_EVENT_ID, eventId) // Use the constant key
                 }
                 context.startActivity(intent)
             }

@@ -16,7 +16,7 @@ interface FavoriteEventDao {
     fun getAllFavoriteEvents(): LiveData<List<FavoriteEventEntity>>
 
     @Query("SELECT EXISTS(SELECT * FROM favorite_event WHERE id = :id)")
-    suspend fun isEventFavorited(id: String): Boolean
+    suspend fun isEventFavorited(id: Int): Boolean
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNews(event: List<FavoriteEventEntity>)
@@ -28,5 +28,5 @@ interface FavoriteEventDao {
     suspend fun deleteAll(event: FavoriteEventEntity)
 
     @Query("SELECT * FROM favorite_event WHERE id = :eventId")
-    fun getFavoriteEventById(eventId: String): LiveData<FavoriteEventEntity?>
+    fun getFavoriteEventById(eventId: Int): LiveData<FavoriteEventEntity?>
 }

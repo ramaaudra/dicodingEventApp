@@ -1,15 +1,9 @@
 package com.dicoding.restaurantreview.ui.ui.favorite
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.dicoding.restaurantreview.data.EventRepository
-import com.dicoding.restaurantreview.data.local.entity.FavoriteEventEntity
-import kotlinx.coroutines.launch
-import com.dicoding.restaurantreview.data.Result
 import com.dicoding.restaurantreview.di.Injection
 
 class FavoriteViewModelFactory(private val eventRepository: EventRepository) : ViewModelProvider.Factory {

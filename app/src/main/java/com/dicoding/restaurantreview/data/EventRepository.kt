@@ -25,11 +25,11 @@ class EventRepository(
         favoriteEventDao.deleteAll(event)
     }
 
-    suspend fun isEventFavorited(id: String): Boolean {
+    suspend fun isEventFavorited(id: Int): Boolean {
         return favoriteEventDao.isEventFavorited(id)
     }
 
-    fun getFavoriteEventById(eventId: String): LiveData<FavoriteEventEntity?> {
+    fun getFavoriteEventById(eventId: Int): LiveData<FavoriteEventEntity?> {
         return favoriteEventDao.getFavoriteEventById(eventId)
     }
 
