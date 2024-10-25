@@ -29,6 +29,7 @@ class FavoriteFragment : Fragment() {
         val root: View = binding.root
 
         setupRecyclerView()
+        setupSearchView()
 
         bookmarkedEventsViewModel.bookmarkedEvents.observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -54,6 +55,30 @@ class FavoriteFragment : Fragment() {
             }
         }
 
+        bookmarkedEventsViewModel.searchResults.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                    Log.d("FavoriteFragment", "Searching favorite events")
+                }
+                is Result.Success -> {
+                    showLoading(false)
+                    val data = result.data
+                    if (data.isNullOrEmpty()) {
+                        Toast.makeText(context, "No search results found", Toast.LENGTH_LONG).show()
+                    } else {
+                        Log.d("FavoriteFragment", "Search results loaded: $data")
+                        favoriteEventAdapter.submitList(data)
+                    }
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Log.e("FavoriteFragment", "Error searching favorite events: ${result.message}")
+                    Toast.makeText(context, "Error: ${result.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
         return root
     }
 
@@ -74,4 +99,19 @@ class FavoriteFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.rvEventsFavorite.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
+
+    private fun setupSearchView() {
+        binding.searchViewFavorite.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    bookmarkedEventsViewModel.searchFavoriteEvents(it)
+                }
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+    }
+
 }

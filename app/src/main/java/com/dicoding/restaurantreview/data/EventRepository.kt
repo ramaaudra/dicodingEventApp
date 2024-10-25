@@ -101,6 +101,18 @@ class EventRepository(
         }
     }
 
+    suspend fun searchFavoriteEvents(query: String): Result<List<FavoriteEventEntity>?> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val favoriteEvents = favoriteEventDao.searchFavoriteEvents(query)
+            Result.Success(favoriteEvents)
+        } catch (e: Exception) {
+            Result.Error("Failed to search favorite events: ${e.message}")
+        }
+    }
+
+
+
+
     fun getFavoriteEvents(): LiveData<List<FavoriteEventEntity>> {
         return favoriteEventDao.getAllFavoriteEvents()
     }

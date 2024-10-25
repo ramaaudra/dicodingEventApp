@@ -1,12 +1,11 @@
 package com.dicoding.restaurantreview.ui
 
 import android.os.Bundle
-import android.widget.CompoundButton
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContentProviderCompat.requireContext
+
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -17,7 +16,6 @@ import com.dicoding.restaurantreview.ui.ui.setting.SettingViewModel
 import com.dicoding.restaurantreview.ui.ui.setting.SettingViewModelFactory
 import com.dicoding.restaurantreview.ui.ui.setting.dataStore
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class BottomNavigation : AppCompatActivity() {

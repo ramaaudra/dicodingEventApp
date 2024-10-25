@@ -29,4 +29,7 @@ interface FavoriteEventDao {
 
     @Query("SELECT * FROM favorite_event WHERE id = :eventId")
     fun getFavoriteEventById(eventId: Int): LiveData<FavoriteEventEntity?>
+
+    @Query("SELECT * FROM favorite_event WHERE name LIKE '%' || :query || '%'")
+    suspend fun searchFavoriteEvents(query: String): List<FavoriteEventEntity>
 }

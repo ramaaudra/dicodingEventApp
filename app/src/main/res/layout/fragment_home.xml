@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dicoding Event"
+                android:text="@string/dicoding_event_title"
                 android:fontFamily="@font/black"
                 android:textSize="30sp"
                 android:layout_marginLeft="16dp" />

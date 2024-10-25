@@ -8,11 +8,15 @@ import com.dicoding.restaurantreview.data.EventRepository
 import com.dicoding.restaurantreview.data.local.entity.FavoriteEventEntity
 import kotlinx.coroutines.launch
 import com.dicoding.restaurantreview.data.Result
+import com.dicoding.restaurantreview.data.remote.response.ListEventsItem
 
 class FavoriteViewModel(private val eventRepository: EventRepository) : ViewModel() {
 
     private val _bookmarkedEvents = MutableLiveData<Result<List<FavoriteEventEntity>?>>()
     val bookmarkedEvents: LiveData<Result<List<FavoriteEventEntity>?>> = _bookmarkedEvents
+
+    private val _searchResults = MutableLiveData<Result<List<FavoriteEventEntity>?>>()
+    val searchResults: LiveData<Result<List<FavoriteEventEntity>?>> = _searchResults
 
     init {
         fetchFavoriteEvents()
@@ -36,4 +40,14 @@ class FavoriteViewModel(private val eventRepository: EventRepository) : ViewMode
             }
         }
     }
+
+    fun searchFavoriteEvents(query: String) {
+        _searchResults.value = Result.Loading
+        viewModelScope.launch {
+            _searchResults.value = eventRepository.searchFavoriteEvents(query)
+
+        }
+    }
+
+
 }
