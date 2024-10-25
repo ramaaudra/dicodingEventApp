@@ -1,23 +1,45 @@
 package com.dicoding.restaurantreview.ui
 
 import android.os.Bundle
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.dicoding.restaurantreview.R
 import com.dicoding.restaurantreview.databinding.ActivityBottomNavigationBinding
+import com.dicoding.restaurantreview.ui.ui.setting.SettingPreferences
+import com.dicoding.restaurantreview.ui.ui.setting.SettingViewModel
+import com.dicoding.restaurantreview.ui.ui.setting.SettingViewModelFactory
+import com.dicoding.restaurantreview.ui.ui.setting.dataStore
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 class BottomNavigation : AppCompatActivity() {
 
     private lateinit var binding: ActivityBottomNavigationBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityBottomNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val pref = SettingPreferences.getInstance(this.dataStore)
+        val settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref))[SettingViewModel::class.java]
+
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         val navView: BottomNavigationView = binding.navView
 

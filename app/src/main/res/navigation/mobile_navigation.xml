@@ -27,4 +27,10 @@
         android:name="com.dicoding.restaurantreview.ui.ui.favorite.FavoriteFragment"
         android:label="@string/favorite_title"
         tools:layout="@layout/fragment_favorite" />
+
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.dicoding.restaurantreview.ui.ui.setting.SettingFragment"
+        android:label="@string/setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

@@ -13,4 +13,8 @@
     <string name="tvtext">TextView</string>
     <string name="quota_text">Sisa kuota: %1$d</string>
     <string name="favorite_title">Favorite</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="setting">Setting</string>
 </resources>
