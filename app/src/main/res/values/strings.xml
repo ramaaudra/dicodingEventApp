@@ -19,4 +19,5 @@
     <string name="setting">Setting</string>
     <string name="dicoding_event_title">Dicoding Event</string>
     <string name="judul_event">Judul Event</string>
+    <string name="daily_reminder">Daily Reminder</string>
 </resources>

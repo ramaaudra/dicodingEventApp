@@ -15,7 +15,7 @@ val Context.dataStore by preferencesDataStore(name = "settings")
 class SettingPreferences(private val dataStore: DataStore<Preferences>) {
 
     private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
-
+    private val REMINDERKEY = booleanPreferencesKey("daily_reminder")
     companion object {
 
         @Volatile
@@ -49,5 +49,17 @@ class SettingPreferences(private val dataStore: DataStore<Preferences>) {
                 preferences[DARK_MODE_KEY] ?: false // default ke false jika tidak ada pengaturan
             }
             .first() // mengambil data pertama (sinkron)
+    }
+
+    fun getReminderSetting(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[REMINDERKEY] ?: false
+        }
+    }
+
+    suspend fun saveReminderSetting(enabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[REMINDERKEY] = enabled
+        }
     }
 }
