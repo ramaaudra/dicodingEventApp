@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "RestaurantReview"
+rootProject.name = "DicodingEventApp"
 include(":app")
  

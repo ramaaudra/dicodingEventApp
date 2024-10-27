@@ -1,0 +1,41 @@
+package com.dicoding.eventapp.ui.ui.detail
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.dicoding.eventapp.data.EventRepository
+import com.dicoding.eventapp.data.local.entity.FavoriteEventEntity
+import com.dicoding.eventapp.data.remote.response.Event
+
+import kotlinx.coroutines.launch
+import com.dicoding.eventapp.data.Result
+
+class DetailViewModel(private val eventRepository: EventRepository) : ViewModel() {
+
+    private val _eventDetail = MutableLiveData<Result<Event?>>()
+    val eventDetail: LiveData<Result<Event?>> = _eventDetail
+
+    fun fetchEventDetail(eventId: Int) {
+        _eventDetail.value = Result.Loading
+        viewModelScope.launch {
+            val result = eventRepository.fetchEventDetail(eventId)
+            _eventDetail.value = result
+        }
+    }
+
+    fun getEventById(eventId: Int): LiveData<FavoriteEventEntity?> {
+        return eventRepository.getFavoriteEventById(eventId)
+    }
+
+    fun toggleFavoriteEvent(event: Event) {
+        viewModelScope.launch {
+            val isFavorited = eventRepository.isEventFavorited(event.id)
+            if (isFavorited) {
+                eventRepository.deleteFavoriteEvent(FavoriteEventEntity(event.id, event.name, event.mediaCover))
+            } else {
+                eventRepository.insertFavoriteEvent(FavoriteEventEntity(event.id, event.name, event.mediaCover))
+            }
+        }
+    }
+}

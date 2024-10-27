@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.dicoding.restaurantreview"
+    namespace = "com.dicoding.eventapp"
     compileSdk = 34
 
     buildFeatures {
@@ -24,7 +24,7 @@ android {
 
 
     defaultConfig {
-        applicationId = "com.dicoding.restaurantreview"
+        applicationId = "com.dicoding.eventapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -83,8 +83,6 @@ dependencies {
     implementation (libs.androidx.lifecycle.extensions)
     implementation(libs.androidx.datastore.preferences)
 
-    implementation("androidx.work:work-runtime:2.9.1")
-    implementation("com.loopj.android:android-async-http:1.4.11")
-
-
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.android.async.http)
 }

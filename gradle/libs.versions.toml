@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.0"
+androidAsyncHttp = "1.4.11"
 glide = "4.16.0"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
@@ -23,11 +24,14 @@ roomKtx = "2.6.1"
 legacySupportV4 = "1.0.0"
 fragmentKtx = "1.8.4"
 datastorePreferences = "1.1.1"
+workRuntime = "2.9.1"
 
 [libraries]
+android-async-http = { module = "com.loopj.android:android-async-http", version.ref = "androidAsyncHttp" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensions" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

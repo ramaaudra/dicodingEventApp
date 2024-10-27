@@ -6,31 +6,31 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.dicoding.restaurantreview.ui.ui.home.HomeFragment"
+        android:name="com.dicoding.eventapp.ui.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.dicoding.restaurantreview.ui.ui.dashboard.DashboardFragment"
+        android:name="com.dicoding.eventapp.ui.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.dicoding.restaurantreview.ui.ui.notifications.NotificationsFragment"
+        android:name="com.dicoding.eventapp.ui.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.dicoding.restaurantreview.ui.ui.favorite.FavoriteFragment"
+        android:name="com.dicoding.eventapp.ui.ui.favorite.FavoriteFragment"
         android:label="@string/favorite_title"
         tools:layout="@layout/fragment_favorite" />
 
     <fragment
         android:id="@+id/navigation_setting"
-        android:name="com.dicoding.restaurantreview.ui.ui.setting.SettingFragment"
+        android:name="com.dicoding.eventapp.ui.ui.setting.SettingFragment"
         android:label="@string/setting"
         tools:layout="@layout/fragment_setting" />
 </navigation>
